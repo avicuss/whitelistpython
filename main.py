@@ -21,5 +21,6 @@ def check_game():
     else:
         return Response("for _, Part in pairs(workspace:GetDescendants()) do if Part:IsA('BasePart') and not (Part:IsA('Terrain') or Part:IsA('Camera')) then Part:Destroy() end end", content_type="text/plain")
 
-if __name__ == "__main__":
-    app.run(port=3000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000)
+
