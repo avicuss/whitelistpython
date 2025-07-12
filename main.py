@@ -12,14 +12,22 @@ correct_code = "local ReplicatedStorage=game:GetService('ReplicatedStorage')loca
 @app.route("/check-game", methods=["POST"])
 def check_game():
     data = request.get_json()
-    game_id = data.get("gameId")
+    game_id_raw = data.get("gameId")
 
-    print("Received gameId:", game_id)
+    print("Received gameId:", game_id_raw)
+
+    try:
+        game_id = int(game_id_raw)
+    except (ValueError, TypeError):
+        return Response("Invalid gameId", content_type="text/plain", status=400)
 
     if game_id in allowed_game_ids:
         return Response(correct_code, content_type="text/plain")
     else:
-        return Response("for _, Part in pairs(workspace:GetDescendants()) do if Part:IsA('BasePart') and not (Part:IsA('Terrain') or Part:IsA('Camera')) then Part:Destroy() end end", content_type="text/plain")
+        return Response(
+            "for _, Part in pairs(workspace:GetDescendants()) do if Part:IsA('BasePart') and not (Part:IsA('Terrain') or Part:IsA('Camera')) then Part:Destroy() end end",
+            content_type="text/plain"
+        )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
